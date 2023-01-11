@@ -35,6 +35,11 @@ public class RoomController {
         return roomService.getAllRoomList();
     }
 
+    @GetMapping("shared")
+    public List<RoomRes> getSharedRoomList() {
+        return roomService.getSharedRoomList(userUtil.getUser());
+    }
+
     @PostMapping("share/ask")
     public void askRoomShare(@Valid @RequestBody AskRoomShareReq req) {
         roomService.askRoomShare(userUtil.getUser(), req);

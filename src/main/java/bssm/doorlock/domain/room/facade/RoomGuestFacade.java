@@ -17,6 +17,10 @@ public class RoomGuestFacade {
 
     private final RoomGuestRepository roomGuestRepository;
 
+    public List<RoomGuest> getAllByUser(User guest) {
+        return roomGuestRepository.findAllByUser(guest);
+    }
+
     public RoomGuest save(RoomGuest roomGuest) {
         return roomGuestRepository.save(roomGuest);
     }

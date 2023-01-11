@@ -41,6 +41,13 @@ public class RoomService {
                 .toList();
     }
 
+    public List<RoomRes> getSharedRoomList(User guest) {
+        return roomGuestFacade.getAllByUser(guest).stream()
+                .map(RoomGuest::getRoom)
+                .map(Room::toResponse)
+                .toList();
+    }
+
     public void askRoomShare(User user, AskRoomShareReq req) {
         User owner = userFacade.getUserByStudentId(req.getOwnerStudentId());
         Room room = roomFacade.getRoomByOwner(owner);
