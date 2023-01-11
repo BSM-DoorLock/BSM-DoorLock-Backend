@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth/oauth/bsm").permitAll()
+                .antMatchers(HttpMethod.PUT, "/auth/token/refresh").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/auth/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();

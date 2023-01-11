@@ -1,14 +1,12 @@
 package bssm.doorlock.domain.auth.presentation;
 
-import bssm.doorlock.domain.auth.presentation.dto.res.AuthLoginRes;
+import bssm.doorlock.domain.auth.presentation.dto.res.AuthTokenRes;
 import bssm.doorlock.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("auth")
@@ -17,8 +15,21 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Value("${token.refresh-token.name}")
+    private String REFRESH_TOKEN_NAME;
+
     @PostMapping("oauth/bsm")
-    public AuthLoginRes bsmOauth(@RequestParam(value = "code") String authCode, HttpServletResponse res) throws Exception {
-        return authService.loginPostProcess(res, authService.bsmOauth(authCode));
+    public AuthTokenRes bsmOauth(@RequestParam(value = "code") String authCode) throws Exception {
+        return authService.loginPostProcess(authService.bsmOauth(authCode));
+    }
+
+    @PutMapping("token/refresh")
+    public AuthTokenRes tokenRefresh(HttpServletRequest req) {
+        return authService.tokenRefresh(req.getHeader(REFRESH_TOKEN_NAME));
+    }
+
+    @DeleteMapping("logout")
+    public void logout(HttpServletRequest req) {
+        authService.logout(req.getHeader(REFRESH_TOKEN_NAME));
     }
 }

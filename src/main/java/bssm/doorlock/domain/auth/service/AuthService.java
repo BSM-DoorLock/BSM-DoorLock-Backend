@@ -3,7 +3,8 @@ package bssm.doorlock.domain.auth.service;
 import bssm.doorlock.domain.auth.domain.repository.RefreshTokenRepository;
 import bssm.doorlock.domain.auth.exception.AuthCodeNotFoundException;
 import bssm.doorlock.domain.auth.exception.InvalidOauthClientException;
-import bssm.doorlock.domain.auth.presentation.dto.res.AuthLoginRes;
+import bssm.doorlock.domain.auth.facade.AuthFacade;
+import bssm.doorlock.domain.auth.presentation.dto.res.AuthTokenRes;
 import bssm.doorlock.domain.user.domain.Student;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.domain.UserRole;
@@ -20,15 +21,9 @@ import leehj050211.bsmOauth.exceptions.BsmAuthCodeNotFoundException;
 import leehj050211.bsmOauth.exceptions.BsmAuthInvalidClientException;
 import leehj050211.bsmOauth.exceptions.BsmAuthTokenNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -36,14 +31,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final AuthFacade authFacade;
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final BsmOauth bsmOauth;
     private final JwtProvider jwtProvider;
-
-    @Value("${token.refresh-token.name}")
-    private String REFRESH_TOKEN_NAME;
 
     public User bsmOauth(String authCode) throws IOException {
         String token;
@@ -73,30 +65,38 @@ public class AuthService {
         };
     }
 
-    public AuthLoginRes loginPostProcess(HttpServletResponse res, User user) {
+    public AuthTokenRes loginPostProcess(User user) {
         String token = jwtProvider.createAccessToken(user);
         String refreshToken = jwtProvider.createRefreshToken(user.getCode());
 
-        return AuthLoginRes.builder()
+        return AuthTokenRes.builder()
                 .accessToken(token)
                 .refreshToken(refreshToken)
                 .build();
     }
 
+    public AuthTokenRes tokenRefresh(String refreshToken) {
+        User user = authFacade.getUserByRefreshToken(
+                jwtProvider.getRefreshToken(refreshToken)
+        );
+        String newToken = jwtProvider.createAccessToken(user);
+        return AuthTokenRes.builder()
+                .accessToken(newToken)
+                .build();
+    }
+
     @Transactional
-    public void logout(HttpServletRequest req, HttpServletResponse res) {
-        String refreshToken = req.getHeader(REFRESH_TOKEN_NAME);
+    public void logout(String refreshToken) {
         if (refreshToken == null) {
             throw new BadRequestException(ImmutableMap.<String, String>builder().
                     put("refresh-token", "리프레시 토큰이 없습니다").
                     build()
             );
         }
-        try {
-            refreshTokenRepository.findById(
-                    jwtProvider.getRefreshToken(refreshToken)
-            ).ifPresent(token -> token.setAvailable(false));
-        } catch (Exception ignored) {}
+
+        authFacade.getRefreshToken(
+                jwtProvider.getRefreshToken(refreshToken)
+        ).setAvailable(false);
     }
 
     @Transactional
