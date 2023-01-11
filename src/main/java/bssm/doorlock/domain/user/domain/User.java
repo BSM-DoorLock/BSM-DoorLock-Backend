@@ -30,13 +30,18 @@ public class User extends BaseTimeEntity {
     @Column(length = 10)
     private String studentId;
 
+    @OneToOne
+    @JoinColumn(name = "studentId", insertable = false, updatable = false)
+    private Student student;
+
     @Builder
-    public User(Long code, String nickname, UserRole role, String oauthToken, String studentId) {
+    public User(Long code, String nickname, UserRole role, String oauthToken, String studentId, Student student) {
         this.code = code;
         this.nickname = nickname;
         this.role = role;
         this.oauthToken = oauthToken;
         this.studentId = studentId;
+        this.student = student;
     }
 
     public void setNickname(String nickname) {
