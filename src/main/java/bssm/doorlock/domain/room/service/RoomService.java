@@ -2,10 +2,7 @@ package bssm.doorlock.domain.room.service;
 
 import bssm.doorlock.domain.room.domain.*;
 import bssm.doorlock.domain.room.exception.ForbiddenAccessRoomException;
-import bssm.doorlock.domain.room.facade.RoomFacade;
-import bssm.doorlock.domain.room.facade.RoomGuestFacade;
-import bssm.doorlock.domain.room.facade.RoomOwnerFacade;
-import bssm.doorlock.domain.room.facade.RoomShareFacade;
+import bssm.doorlock.domain.room.facade.*;
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
@@ -27,6 +24,7 @@ public class RoomService {
     private final RoomShareFacade roomShareFacade;
     private final RoomOwnerFacade roomOwnerFacade;
     private final RoomGuestFacade roomGuestFacade;
+    private final RoomAccessFacade roomAccessFacade;
     private final UserFacade userFacade;
 
     public RoomRes getMyRoom(User owner) {
@@ -99,6 +97,8 @@ public class RoomService {
         if (!roomFacade.accessCheck(user, room)) throw new ForbiddenAccessRoomException();
 
         room.setOpen(req.getState());
+
+        if (req.getState()) roomAccessFacade.saveLog(room, user);
     }
 
 }

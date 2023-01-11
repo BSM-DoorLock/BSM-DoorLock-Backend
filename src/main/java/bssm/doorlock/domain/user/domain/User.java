@@ -65,6 +65,7 @@ public class User extends BaseTimeEntity {
                 .role(role)
                 .oauthToken(oauthToken)
                 .studentId(studentId)
+                .student(student)
                 .build();
     }
 
