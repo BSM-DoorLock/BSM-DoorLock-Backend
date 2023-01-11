@@ -36,8 +36,8 @@ public class RoomAccessLog extends BaseTimeEntity {
     public RoomAccessLogRes toResponse() {
         return RoomAccessLogRes.builder()
                 .id(id)
-                .room(room)
-                .user(user)
+                .roomId(room.getId())
+                .user(user.toStudentResponse())
                 .accessedAt(getCreatedAt())
                 .build();
     }

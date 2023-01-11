@@ -6,6 +6,7 @@ import bssm.doorlock.domain.room.facade.*;
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomAccessLogRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.user.domain.User;
@@ -29,6 +30,7 @@ public class RoomService {
 
     public RoomRes getMyRoom(User owner) {
         return roomOwnerFacade.getByOwner(owner)
+                .getRoom()
                 .toResponse();
     }
 
@@ -52,7 +54,8 @@ public class RoomService {
 
     public void askRoomShare(User user, AskRoomShareReq req) {
         User owner = userFacade.getUserByStudentId(req.getOwnerStudentId());
-        Room room = roomOwnerFacade.getByOwner(owner);
+        Room room = roomOwnerFacade.getByOwner(owner)
+                .getRoom();
 
         RoomShare roomShare = RoomShare.builder()
                 .guest(user)
@@ -99,6 +102,15 @@ public class RoomService {
         room.setOpen(req.getState());
 
         if (req.getState()) roomAccessFacade.saveLog(room, user);
+    }
+
+    public List<RoomAccessLogRes> getAccessLog(User user) {
+        Room room = roomOwnerFacade.getByOwner(user)
+                .getRoom();
+
+        return roomAccessFacade.getAllByRoom(room).stream()
+                .map(RoomAccessLog::toResponse)
+                .toList();
     }
 
 }

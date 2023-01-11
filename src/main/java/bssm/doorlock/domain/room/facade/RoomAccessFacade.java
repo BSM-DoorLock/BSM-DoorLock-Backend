@@ -7,6 +7,8 @@ import bssm.doorlock.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class RoomAccessFacade {
@@ -19,6 +21,10 @@ public class RoomAccessFacade {
                 .user(user)
                 .build();
         roomAccessLogRepository.save(newLog);
+    }
+
+    public List<RoomAccessLog> getAllByRoom(Room room) {
+        return roomAccessLogRepository.findAllByRoom(room);
     }
 
 }

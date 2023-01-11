@@ -3,6 +3,7 @@ package bssm.doorlock.domain.room.presentation;
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomAccessLogRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.room.service.RoomService;
@@ -24,6 +25,11 @@ public class RoomController {
     @GetMapping("my")
     public RoomRes getMyRoom() {
         return roomService.getMyRoom(userUtil.getUser());
+    }
+
+    @GetMapping("my/log")
+    public List<RoomAccessLogRes> getMyRoomLog() {
+        return roomService.getAccessLog(userUtil.getUser());
     }
 
     @GetMapping("{roomId}")
