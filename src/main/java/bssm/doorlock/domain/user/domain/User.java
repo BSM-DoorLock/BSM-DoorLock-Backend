@@ -1,6 +1,8 @@
 package bssm.doorlock.domain.user.domain;
 
+import bssm.doorlock.domain.room.domain.Room;
 import bssm.doorlock.domain.user.presentation.dto.res.UserInfoRes;
+import bssm.doorlock.domain.user.presentation.dto.res.UserRes;
 import bssm.doorlock.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,14 +37,18 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "studentId", insertable = false, updatable = false)
     private Student student;
 
+    @ManyToOne
+    private Room room;
+
     @Builder
-    public User(Long code, String name, UserRole role, String oauthToken, String studentId, Student student) {
+    public User(Long code, String name, UserRole role, String oauthToken, String studentId, Student student, Room room) {
         this.code = code;
         this.name = name;
         this.role = role;
         this.oauthToken = oauthToken;
         this.studentId = studentId;
         this.student = student;
+        this.room = room;
     }
 
     public void setName(String name) {
@@ -54,6 +60,14 @@ public class User extends BaseTimeEntity {
                 .code(code)
                 .role(role)
                 .name(name)
+                .build();
+    }
+
+    public UserRes toUserResponse() {
+        return UserRes.builder()
+                .code(code)
+                .name(name)
+                .studentId(studentId)
                 .build();
     }
 

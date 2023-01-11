@@ -8,5 +8,7 @@ import lombok.Getter;
 public class UserRes {
 
     private Long code;
-    private String nickname;
+    private String name;
+    private String studentId;
+
 }
