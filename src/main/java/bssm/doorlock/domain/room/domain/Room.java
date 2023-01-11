@@ -41,6 +41,7 @@ public class Room {
     public RoomRes toResponse() {
         return RoomRes.builder()
                 .id(id)
+                .isOpen(isOpen)
                 .owners(owners.stream()
                         .map(User::toUserResponse)
                         .toList())
