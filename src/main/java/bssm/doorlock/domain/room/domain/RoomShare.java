@@ -48,6 +48,12 @@ public class RoomShare {
                 .room(room.toShareResponse())
                 .owner(owner.toUserResponse())
                 .guest(guest.toUserResponse())
+                .stat(stat)
                 .build();
     }
+
+    public void setStat(RoomShareStat stat) {
+        this.stat = stat;
+    }
+
 }

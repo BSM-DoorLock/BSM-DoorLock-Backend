@@ -1,10 +1,10 @@
 package bssm.doorlock.domain.room.service;
 
-import bssm.doorlock.domain.room.domain.Room;
-import bssm.doorlock.domain.room.domain.RoomShare;
-import bssm.doorlock.domain.room.domain.RoomShareStat;
+import bssm.doorlock.domain.room.domain.*;
 import bssm.doorlock.domain.room.facade.RoomFacade;
+import bssm.doorlock.domain.room.facade.RoomGuestFacade;
 import bssm.doorlock.domain.room.facade.RoomShareFacade;
+import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
@@ -12,6 +12,7 @@ import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class RoomService {
 
     private final RoomFacade roomFacade;
     private final RoomShareFacade roomShareFacade;
+    private final RoomGuestFacade roomGuestFacade;
     private final UserFacade userFacade;
 
     public RoomRes getMyRoom(User user) {
@@ -51,6 +53,21 @@ public class RoomService {
                 .build();
 
         roomShareFacade.save(roomShare);
+    }
+
+    @Transactional
+    public void acceptRoomShare(User user, AcceptRoomShareReq req) {
+        RoomShare roomShare = roomShareFacade.getById(req.getShareId());
+        roomShare.setStat(req.getStat());
+
+        RoomGuest roomGuest = RoomGuest.builder()
+                .pk(RoomGuestPk.builder()
+                        .roomId(roomShare.getRoom().getId())
+                        .userCode(user.getCode())
+                        .build())
+                .build();
+
+        roomGuestFacade.save(roomGuest);
     }
 
     public List<RoomShareRes> getAskShareList(User guest) {

@@ -1,5 +1,6 @@
 package bssm.doorlock.domain.room.presentation;
 
+import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
@@ -34,9 +35,14 @@ public class RoomController {
         return roomService.getAllRoomList();
     }
 
-    @PostMapping("share")
+    @PostMapping("share/ask")
     public void askRoomShare(@Valid @RequestBody AskRoomShareReq req) {
         roomService.askRoomShare(userUtil.getUser(), req);
+    }
+
+    @PostMapping("share/accept")
+    public void acceptRoomShare(@Valid @RequestBody AcceptRoomShareReq req) {
+        roomService.acceptRoomShare(userUtil.getUser(), req);
     }
 
     @GetMapping("share/ask")

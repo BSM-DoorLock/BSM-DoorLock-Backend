@@ -1,6 +1,5 @@
 package bssm.doorlock.domain.room.domain;
 
-import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.presentation.dto.res.UserRes;
 import lombok.AccessLevel;
@@ -9,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -36,4 +33,10 @@ public class RoomGuest {
         return user.toUserResponse();
     }
 
+    @Builder
+    public RoomGuest(RoomGuestPk pk, Room room, User user) {
+        this.pk = pk;
+        this.room = room;
+        this.user = user;
+    }
 }

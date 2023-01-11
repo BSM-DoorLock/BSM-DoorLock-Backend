@@ -2,6 +2,7 @@ package bssm.doorlock.domain.room.facade;
 
 import bssm.doorlock.domain.room.domain.RoomShare;
 import bssm.doorlock.domain.room.domain.repository.RoomShareRepository;
+import bssm.doorlock.domain.room.exception.RoomNotFoundException;
 import bssm.doorlock.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,11 @@ public class RoomShareFacade {
 
     public List<RoomShare> getReceiveShareList(User owner) {
         return roomShareRepository.findAllByOwner(owner);
+    }
+
+    public RoomShare getById(Long id) {
+        return roomShareRepository.findById(id)
+                .orElseThrow(RoomNotFoundException::new);
     }
 
     public RoomShare save(RoomShare roomShare) {
