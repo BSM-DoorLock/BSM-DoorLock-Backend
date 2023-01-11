@@ -15,18 +15,9 @@ public class RoomFacade {
 
     private final RoomRepository roomRepository;
 
-    public Room getMyRoom(User user) {
-        return roomRepository.findByOwners(user)
-                .orElseThrow(RoomNotFoundException::new);
-    }
-
     public Room getRoomById(Long id) {
         return roomRepository.findById(id)
                 .orElseThrow(RoomNotFoundException::new);
-    }
-
-    public Room getRoomByOwner(User owner) {
-        return getMyRoom(owner);
     }
 
     public List<Room> getAllRoomList() {
@@ -34,7 +25,8 @@ public class RoomFacade {
     }
 
     public boolean accessCheck(User user, Room room) {
-        if (room.getOwners().contains(user)) return true;
+        if (room.getOwners().stream()
+                .anyMatch(owner -> owner.getUser().equals(user))) return true;
         return room.getGuests().stream()
                 .anyMatch(guest -> guest.getUser().equals(user));
     }

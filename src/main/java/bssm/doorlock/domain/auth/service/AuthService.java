@@ -110,7 +110,6 @@ public class AuthService {
 
         User user = User.builder()
                 .code(resource.getUserCode())
-                .name(resource.getStudent().getName())
                 .role(UserRole.STUDENT)
                 .studentId(student.getStudentId())
                 .oauthToken(oauthToken)
@@ -122,7 +121,6 @@ public class AuthService {
     private User teacherSignUp(BsmResourceResponse resource, String oauthToken) {
         User user = User.builder()
                 .code(resource.getUserCode())
-                .name(resource.getTeacher().getName())
                 .role(UserRole.TEACHER)
                 .oauthToken(oauthToken)
                 .build();
@@ -138,13 +136,12 @@ public class AuthService {
         student.setClassNo(studentDto.getClassNo());
         student.setStudentNo(studentDto.getStudentNo());
         student.setEnrolledAt(studentDto.getEnrolledAt());
-        user.setName(dto.getStudent().getName());
+        student.setName(dto.getStudent().getName());
         return userRepository.save(user);
     }
 
     @Transactional
     private User teacherUpdate(BsmResourceResponse dto, User user) {
-        user.setName(dto.getTeacher().getName());
         return userRepository.save(user);
     }
 

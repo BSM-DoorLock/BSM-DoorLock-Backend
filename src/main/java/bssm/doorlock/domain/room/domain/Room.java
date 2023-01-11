@@ -27,7 +27,7 @@ public class Room {
     private Boolean isOpen;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private final List<User> owners = new ArrayList<>();
+    private final List<RoomOwner> owners = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private final Set<RoomGuest> guests = new HashSet<>();
@@ -43,7 +43,7 @@ public class Room {
                 .id(id)
                 .isOpen(isOpen)
                 .owners(owners.stream()
-                        .map(User::toUserResponse)
+                        .map(RoomOwner::toResponse)
                         .toList())
                 .guests(guests.stream()
                         .map(RoomGuest::toResponse)
@@ -56,7 +56,7 @@ public class Room {
                 .id(id)
                 .isOpen(isOpen)
                 .owners(owners.stream()
-                        .map(User::toUserResponse)
+                        .map(RoomOwner::toResponse)
                         .toList())
                 .build();
     }

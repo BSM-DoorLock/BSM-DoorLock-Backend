@@ -4,6 +4,7 @@ import bssm.doorlock.domain.room.domain.*;
 import bssm.doorlock.domain.room.exception.ForbiddenAccessRoomException;
 import bssm.doorlock.domain.room.facade.RoomFacade;
 import bssm.doorlock.domain.room.facade.RoomGuestFacade;
+import bssm.doorlock.domain.room.facade.RoomOwnerFacade;
 import bssm.doorlock.domain.room.facade.RoomShareFacade;
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
@@ -24,11 +25,12 @@ public class RoomService {
 
     private final RoomFacade roomFacade;
     private final RoomShareFacade roomShareFacade;
+    private final RoomOwnerFacade roomOwnerFacade;
     private final RoomGuestFacade roomGuestFacade;
     private final UserFacade userFacade;
 
-    public RoomRes getMyRoom(User user) {
-        return roomFacade.getMyRoom(user)
+    public RoomRes getMyRoom(User owner) {
+        return roomOwnerFacade.getByOwner(owner)
                 .toResponse();
     }
 
@@ -52,7 +54,7 @@ public class RoomService {
 
     public void askRoomShare(User user, AskRoomShareReq req) {
         User owner = userFacade.getUserByStudentId(req.getOwnerStudentId());
-        Room room = roomFacade.getRoomByOwner(owner);
+        Room room = roomOwnerFacade.getByOwner(owner);
 
         RoomShare roomShare = RoomShare.builder()
                 .guest(user)

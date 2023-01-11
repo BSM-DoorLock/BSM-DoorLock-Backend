@@ -1,6 +1,6 @@
 package bssm.doorlock.domain.room.presentation.dto.res;
 
-import bssm.doorlock.domain.user.presentation.dto.res.UserRes;
+import bssm.doorlock.domain.user.presentation.dto.res.StudentRes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ public class RoomRes {
 
     private Long id;
     private Boolean isOpen;
-    private List<UserRes> owners;
-    private List<UserRes> guests;
+    private List<StudentRes> owners;
+    private List<StudentRes> guests;
 }

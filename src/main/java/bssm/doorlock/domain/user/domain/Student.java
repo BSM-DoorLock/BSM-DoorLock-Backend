@@ -34,18 +34,22 @@ public class Student {
     @Column(length = 32)
     private String email;
 
+    @Column(length = 8)
+    private String name;
+
     @OneToOne(mappedBy = "student")
     @org.springframework.data.annotation.Transient
     private User user;
 
     @Builder
-    public Student(String studentId, int enrolledAt, int grade, int classNo, int studentNo, String email, User user) {
+    public Student(String studentId, int enrolledAt, int grade, int classNo, int studentNo, String email, String name, User user) {
         this.studentId = studentId;
         this.enrolledAt = enrolledAt;
         this.grade = grade;
         this.classNo = classNo;
         this.studentNo = studentNo;
         this.email = email;
+        this.name = name;
         this.user = user;
     }
 
@@ -65,4 +69,7 @@ public class Student {
         this.studentNo = studentNo;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
