@@ -61,4 +61,7 @@ public class Room {
                 .build();
     }
 
+    public void setOpen(Boolean open) {
+        isOpen = open;
+    }
 }

@@ -2,6 +2,7 @@ package bssm.doorlock.domain.room.presentation;
 
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
+import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.room.service.RoomService;
@@ -58,6 +59,14 @@ public class RoomController {
     @GetMapping("share/receive")
     public List<RoomShareRes> getReceiveShareList() {
         return roomService.getReceiveShareList(userUtil.getUser());
+    }
+
+    @PutMapping("{roomId}/state")
+    public void updateDoorState(
+            @PathVariable Long roomId,
+            @RequestBody UpdateDoorStateReq req
+    ) {
+        roomService.updateDoorState(userUtil.getUser(), roomId, req);
     }
 
 }

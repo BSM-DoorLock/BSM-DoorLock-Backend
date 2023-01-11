@@ -33,4 +33,10 @@ public class RoomFacade {
         return roomRepository.findAll();
     }
 
+    public boolean accessCheck(User user, Room room) {
+        if (room.getOwners().contains(user)) return true;
+        return room.getGuests().stream()
+                .anyMatch(guest -> guest.getUser().equals(user));
+    }
+
 }

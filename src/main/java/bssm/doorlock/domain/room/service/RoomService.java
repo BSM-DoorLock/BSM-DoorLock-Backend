@@ -1,11 +1,13 @@
 package bssm.doorlock.domain.room.service;
 
 import bssm.doorlock.domain.room.domain.*;
+import bssm.doorlock.domain.room.exception.ForbiddenAccessRoomException;
 import bssm.doorlock.domain.room.facade.RoomFacade;
 import bssm.doorlock.domain.room.facade.RoomGuestFacade;
 import bssm.doorlock.domain.room.facade.RoomShareFacade;
 import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
+import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.user.domain.User;
@@ -87,6 +89,14 @@ public class RoomService {
         return roomShareFacade.getReceiveShareList(owner).stream()
                 .map(RoomShare::toResponse)
                 .toList();
+    }
+
+    @Transactional
+    public void updateDoorState(User user, Long id, UpdateDoorStateReq req) {
+        Room room = roomFacade.getRoomById(id);
+        if (!roomFacade.accessCheck(user, room)) throw new ForbiddenAccessRoomException();
+
+        room.setOpen(req.getState());
     }
 
 }

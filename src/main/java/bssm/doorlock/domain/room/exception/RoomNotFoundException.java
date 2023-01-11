@@ -9,9 +9,5 @@ import lombok.NoArgsConstructor;
 public class RoomNotFoundException extends GeneralException {
 
     private final int statusCode = 404;
-    private String message = "방을 찾을 수 없습니다.";
-
-    public RoomNotFoundException(String message) {
-        this.message = message;
-    }
+    private final String message = "방을 찾을 수 없습니다.";
 }
