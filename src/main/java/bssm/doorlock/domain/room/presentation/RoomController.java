@@ -1,14 +1,13 @@
 package bssm.doorlock.domain.room.presentation;
 
+import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.service.RoomService;
 import bssm.doorlock.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,6 +31,11 @@ public class RoomController {
     @GetMapping
     public List<RoomRes> getAllRoomList() {
         return roomService.getAllRoomList();
+    }
+
+    @PostMapping("share")
+    public void askRoomShare(@Valid @RequestBody AskRoomShareReq req) {
+        roomService.askRoomShare(userUtil.getUser(), req);
     }
 
 }

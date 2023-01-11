@@ -25,6 +25,10 @@ public class RoomFacade {
                 .orElseThrow(RoomNotFoundException::new);
     }
 
+    public Room getRoomByOwner(User owner) {
+        return getMyRoom(owner);
+    }
+
     public List<Room> getAllRoomList() {
         return roomRepository.findAll();
     }
