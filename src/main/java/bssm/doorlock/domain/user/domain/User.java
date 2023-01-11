@@ -1,5 +1,6 @@
 package bssm.doorlock.domain.user.domain;
 
+import bssm.doorlock.domain.user.presentation.dto.res.UserInfoRes;
 import bssm.doorlock.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,8 +18,8 @@ public class User extends BaseTimeEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private Long code;
 
-    @Column(nullable = false, length = 40, unique = true)
-    private String nickname;
+    @Column(length = 8)
+    private String name;
 
     @Column(nullable = false, length = 12)
     @Enumerated(EnumType.STRING)
@@ -35,23 +36,31 @@ public class User extends BaseTimeEntity {
     private Student student;
 
     @Builder
-    public User(Long code, String nickname, UserRole role, String oauthToken, String studentId, Student student) {
+    public User(Long code, String name, UserRole role, String oauthToken, String studentId, Student student) {
         this.code = code;
-        this.nickname = nickname;
+        this.name = name;
         this.role = role;
         this.oauthToken = oauthToken;
         this.studentId = studentId;
         this.student = student;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UserInfoRes toUserInfoResponse() {
+        return UserInfoRes.builder()
+                .code(code)
+                .role(role)
+                .name(name)
+                .build();
     }
 
     public UserRedis toUserRedis() {
         return UserRedis.builder()
                 .code(code)
-                .nickname(nickname)
+                .name(name)
                 .role(role)
                 .oauthToken(oauthToken)
                 .studentId(studentId)

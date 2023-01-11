@@ -15,16 +15,16 @@ public class UserRedis extends BaseTimeEntity {
 
     @Id
     private Long code;
-    private String nickname;
+    private String name;
     private UserRole role;
     private String oauthToken;
     private String studentId;
     private Student student;
 
     @Builder
-    public UserRedis(Long code, String nickname, UserRole role, String oauthToken, String studentId, Student student) {
+    public UserRedis(Long code, String name, UserRole role, String oauthToken, String studentId, Student student) {
         this.code = code;
-        this.nickname = nickname;
+        this.name = name;
         this.role = role;
         this.oauthToken = oauthToken;
         this.studentId = studentId;
@@ -34,7 +34,7 @@ public class UserRedis extends BaseTimeEntity {
     public User toUser() {
         return User.builder()
                 .code(code)
-                .nickname(nickname)
+                .name(name)
                 .role(role)
                 .oauthToken(oauthToken)
                 .studentId(studentId)

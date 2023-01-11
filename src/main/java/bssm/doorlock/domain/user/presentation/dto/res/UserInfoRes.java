@@ -1,5 +1,6 @@
 package bssm.doorlock.domain.user.presentation.dto.res;
 
+import bssm.doorlock.domain.user.domain.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Getter;
 public class UserInfoRes {
 
     private Long code;
-    private String nickname;
-    private String email;
+    private String name;
+    private UserRole role;
 
 }
