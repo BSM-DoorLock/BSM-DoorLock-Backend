@@ -2,6 +2,7 @@ package bssm.doorlock.domain.room.presentation;
 
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.room.service.RoomService;
 import bssm.doorlock.global.util.UserUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,16 @@ public class RoomController {
     @PostMapping("share")
     public void askRoomShare(@Valid @RequestBody AskRoomShareReq req) {
         roomService.askRoomShare(userUtil.getUser(), req);
+    }
+
+    @GetMapping("share/ask")
+    public List<RoomShareRes> getAskShareList() {
+        return roomService.getAskShareList(userUtil.getUser());
+    }
+
+    @GetMapping("share/receive")
+    public List<RoomShareRes> getReceiveShareList() {
+        return roomService.getReceiveShareList(userUtil.getUser());
     }
 
 }

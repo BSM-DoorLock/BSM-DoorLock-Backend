@@ -19,8 +19,8 @@ public class AuthController {
     private String REFRESH_TOKEN_NAME;
 
     @PostMapping("oauth/bsm")
-    public AuthTokenRes bsmOauth(@RequestParam(value = "code") String authCode) throws Exception {
-        return authService.loginPostProcess(authService.bsmOauth(authCode));
+    public AuthTokenRes bsmOauth(HttpServletRequest req) throws Exception {
+        return authService.loginPostProcess(authService.bsmOauth(req.getHeader("code")));
     }
 
     @PutMapping("token/refresh")

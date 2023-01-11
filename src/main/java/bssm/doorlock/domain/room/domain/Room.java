@@ -51,4 +51,14 @@ public class Room {
                 .build();
     }
 
+    public RoomRes toShareResponse() {
+        return RoomRes.builder()
+                .id(id)
+                .isOpen(isOpen)
+                .owners(owners.stream()
+                        .map(User::toUserResponse)
+                        .toList())
+                .build();
+    }
+
 }

@@ -45,9 +45,9 @@ public class RoomShare {
     public RoomShareRes toResponse() {
         return RoomShareRes.builder()
                 .id(id)
-                .room(room.toResponse())
-                .owner(owner)
-                .guest(guest)
+                .room(room.toShareResponse())
+                .owner(owner.toUserResponse())
+                .guest(guest.toUserResponse())
                 .build();
     }
 }

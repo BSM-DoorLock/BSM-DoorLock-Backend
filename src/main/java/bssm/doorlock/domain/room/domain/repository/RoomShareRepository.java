@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface RoomShareRepository extends JpaRepository<RoomShare, Long> {
 
-    List<Room> findAllByGuest(User user);
+    List<RoomShare> findAllByGuest(User user);
 
-    List<Room> findAllByOwner(User user);
+    List<RoomShare> findAllByOwner(User user);
 
 }

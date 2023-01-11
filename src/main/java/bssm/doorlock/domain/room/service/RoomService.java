@@ -53,4 +53,16 @@ public class RoomService {
         roomShareFacade.save(roomShare);
     }
 
+    public List<RoomShareRes> getAskShareList(User guest) {
+        return roomShareFacade.getAskShareList(guest).stream()
+                .map(RoomShare::toResponse)
+                .toList();
+    }
+
+    public List<RoomShareRes> getReceiveShareList(User owner) {
+        return roomShareFacade.getReceiveShareList(owner).stream()
+                .map(RoomShare::toResponse)
+                .toList();
+    }
+
 }
