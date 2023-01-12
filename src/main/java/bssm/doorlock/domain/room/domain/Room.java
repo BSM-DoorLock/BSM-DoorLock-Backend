@@ -1,5 +1,6 @@
 package bssm.doorlock.domain.room.domain;
 
+import bssm.doorlock.domain.room.presentation.dto.res.RoomRankingRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.user.domain.User;
 import lombok.AccessLevel;
@@ -27,7 +28,7 @@ public class Room {
     private Boolean isOpen;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private final List<RoomOwner> owners = new ArrayList<>();
+    private final Set<RoomOwner> owners = new HashSet<>();
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private final Set<RoomGuest> guests = new HashSet<>();
@@ -55,6 +56,16 @@ public class Room {
         return RoomRes.builder()
                 .id(id)
                 .isOpen(isOpen)
+                .owners(owners.stream()
+                        .map(RoomOwner::toResponse)
+                        .toList())
+                .build();
+    }
+
+    public RoomRankingRes toRankingResponse() {
+        return RoomRankingRes.builder()
+                .id(id)
+                .totalGuests(guests.size())
                 .owners(owners.stream()
                         .map(RoomOwner::toResponse)
                         .toList())

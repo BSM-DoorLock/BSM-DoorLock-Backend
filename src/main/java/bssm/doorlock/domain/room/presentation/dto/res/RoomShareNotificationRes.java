@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 public class RoomShareNotificationRes {
 
+    private Long shareId;
     private StudentRes owner;
     private StudentRes guest;
 }

@@ -18,6 +18,7 @@ public class RoomNotificationFacade {
 
     public void sendRoomShare(RoomShare roomShare) {
         RoomShareNotificationRes res = RoomShareNotificationRes.builder()
+                .shareId(roomShare.getId())
                 .owner(roomShare.getOwner().toStudentResponse())
                 .guest(roomShare.getGuest().toStudentResponse())
                 .build();
