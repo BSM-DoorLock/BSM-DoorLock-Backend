@@ -1,5 +1,7 @@
 package bssm.doorlock.domain.user.domain;
 
+import bssm.doorlock.domain.room.domain.RoomGuest;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomStudentRankingRes;
 import bssm.doorlock.domain.user.presentation.dto.res.UserRes;
 import bssm.doorlock.domain.user.presentation.dto.res.StudentRes;
 import bssm.doorlock.global.entity.BaseTimeEntity;
@@ -9,7 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -33,6 +37,9 @@ public class User extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "studentId", insertable = false, updatable = false)
     private Student student;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private final Set<RoomGuest> guests = new HashSet<>();
 
     @Builder
     public User(Long code, UserRole role, String oauthToken, String studentId, Student student) {
@@ -66,6 +73,13 @@ public class User extends BaseTimeEntity {
                 .oauthToken(oauthToken)
                 .studentId(studentId)
                 .student(student)
+                .build();
+    }
+
+    public RoomStudentRankingRes toRankingResponse() {
+        return RoomStudentRankingRes.builder()
+                .student(toStudentResponse())
+                .totalSharedRooms(guests.size())
                 .build();
     }
 

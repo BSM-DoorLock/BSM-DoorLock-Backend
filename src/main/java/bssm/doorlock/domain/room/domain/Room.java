@@ -2,16 +2,13 @@ package bssm.doorlock.domain.room.domain;
 
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRankingRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
-import bssm.doorlock.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter

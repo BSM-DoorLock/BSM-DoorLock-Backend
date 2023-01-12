@@ -7,6 +7,8 @@ import bssm.doorlock.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class UserFacade {
@@ -17,6 +19,10 @@ public class UserFacade {
     public User getByCode(Long code) {
         return userRepository.findById(code)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     public User getUserByStudentId(String studentId) {

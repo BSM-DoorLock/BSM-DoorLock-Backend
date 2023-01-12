@@ -1,5 +1,6 @@
 package bssm.doorlock.domain.room.domain;
 
+import bssm.doorlock.domain.room.presentation.dto.res.RoomStudentRankingRes;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.presentation.dto.res.StudentRes;
 import lombok.AccessLevel;
