@@ -11,6 +11,8 @@ import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.facade.UserFacade;
+import bssm.doorlock.global.socket.SocketUtil;
+import bssm.doorlock.global.socket.domain.SocketEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class RoomService {
     private final RoomGuestFacade roomGuestFacade;
     private final RoomAccessFacade roomAccessFacade;
     private final UserFacade userFacade;
+    private final SocketUtil socketUtil;
 
     public RoomRes getMyRoom(User owner) {
         return roomOwnerFacade.getByOwner(owner)
@@ -100,6 +103,7 @@ public class RoomService {
         if (!roomFacade.accessCheck(user, room)) throw new ForbiddenAccessRoomException();
 
         room.setOpen(req.getState());
+        socketUtil.sendMessageToDoorClient(room.getId(), SocketEvent.UPDATE_DOOR_STATE, req.getState());
 
         if (req.getState()) roomAccessFacade.saveLog(room, user);
     }

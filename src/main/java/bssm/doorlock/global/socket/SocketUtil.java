@@ -23,10 +23,10 @@ public class SocketUtil {
         );
     }
 
-    public void sendMessageToDoorClient(Long roomId, SocketEvent socketEvent, Object msg) {
+    public void sendMessageToDoorClient(Long roomId, String socketEvent, Object msg) {
         List<SocketIOClient> clientList = socketClientProvider.findAllByRoomClient(roomId);
         clientList.forEach(client ->
-                asyncService.run(() -> client.sendEvent(String.valueOf(socketEvent), msg))
+                asyncService.run(() -> client.sendEvent(socketEvent, msg))
         );
     }
 }

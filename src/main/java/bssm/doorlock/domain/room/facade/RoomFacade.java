@@ -26,8 +26,10 @@ public class RoomFacade {
 
     public boolean accessCheck(User user, Room room) {
         if (room.getOwners().stream()
+                .filter(owner -> owner.getUser() != null)
                 .anyMatch(owner -> owner.getUser().equals(user))) return true;
         return room.getGuests().stream()
+                .filter(guest -> guest.getUser() != null)
                 .anyMatch(guest -> guest.getUser().equals(user));
     }
 
