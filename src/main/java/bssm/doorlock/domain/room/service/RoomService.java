@@ -81,7 +81,7 @@ public class RoomService {
         RoomGuest roomGuest = RoomGuest.builder()
                 .pk(RoomGuestPk.builder()
                         .roomId(roomShare.getRoom().getId())
-                        .userCode(user.getCode())
+                        .userCode(roomShare.getGuest().getCode())
                         .build())
                 .build();
 
