@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface RoomAccessLogRepository extends JpaRepository<RoomAccessLog, Long> {
 
-    List<RoomAccessLog> findAllByRoom(Room room);
+    List<RoomAccessLog> findAllByRoomOrderByIdDesc(Room room);
 }

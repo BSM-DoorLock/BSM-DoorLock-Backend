@@ -14,6 +14,11 @@ public class UserFacade {
     private final UserRepository userRepository;
     private final RedisUserRepository userRedisRepository;
 
+    public User getByCode(Long code) {
+        return userRepository.findById(code)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
     public User getUserByStudentId(String studentId) {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(UserNotFoundException::new);

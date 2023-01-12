@@ -24,7 +24,7 @@ public class RoomAccessFacade {
     }
 
     public List<RoomAccessLog> getAllByRoom(Room room) {
-        return roomAccessLogRepository.findAllByRoom(room);
+        return roomAccessLogRepository.findAllByRoomOrderByIdDesc(room);
     }
 
 }
