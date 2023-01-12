@@ -10,4 +10,6 @@ public class SocketEvent {
     public static final String ROOM_AUTH = "room_auth";
 
     public static final String UPDATE_DOOR_STATE = "update_door_state";
+
+    public static final String RECEIVE_ROOM_SHARE = "receive_room_share";
 }

@@ -69,6 +69,8 @@ public class RoomService {
                 .build();
 
         roomShareFacade.save(roomShare);
+
+        roomNotificationFacade.sendRoomShare(roomShare);
     }
 
     @Transactional
@@ -101,12 +103,13 @@ public class RoomService {
     @Transactional
     public void updateDoorState(User visitor, Long id, UpdateDoorStateReq req) {
         Room room = roomFacade.getRoomById(id);
-        if (!roomFacade.accessCheck(visitor, room)) throw new ForbiddenAccessRoomException();
+        RoomAccessStat accessStat = roomFacade.accessCheck(visitor, room) ;
+        if (accessStat.equals(RoomAccessStat.OTHER)) throw new ForbiddenAccessRoomException();
 
         room.setOpen(req.getState());
 
         roomNotificationFacade.sendUpdateDoorState(room, visitor);
-        if (req.getState()) roomAccessFacade.saveLog(room, visitor);
+        if (req.getState()) roomAccessFacade.saveLog(room, visitor, accessStat);
     }
 
     public List<RoomAccessLogRes> getAccessLog(User user) {

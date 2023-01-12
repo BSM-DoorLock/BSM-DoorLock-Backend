@@ -26,11 +26,16 @@ public class RoomAccessLog extends BaseTimeEntity {
     @OneToOne
     private User user;
 
+    @Column(nullable = false, length = 5)
+    @Enumerated(EnumType.STRING)
+    RoomAccessStat accessStat;
+
     @Builder
-    public RoomAccessLog(Long id, Room room, User user) {
+    public RoomAccessLog(Long id, Room room, User user, RoomAccessStat accessStat) {
         this.id = id;
         this.room = room;
         this.user = user;
+        this.accessStat = accessStat;
     }
 
     public RoomAccessLogRes toResponse() {
@@ -38,6 +43,7 @@ public class RoomAccessLog extends BaseTimeEntity {
                 .id(id)
                 .roomId(room.getId())
                 .user(user.toStudentResponse())
+                .accessStat(accessStat)
                 .accessedAt(getCreatedAt())
                 .build();
     }

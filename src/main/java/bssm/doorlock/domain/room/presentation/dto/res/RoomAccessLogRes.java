@@ -1,7 +1,6 @@
 package bssm.doorlock.domain.room.presentation.dto.res;
 
-import bssm.doorlock.domain.room.domain.Room;
-import bssm.doorlock.domain.user.domain.User;
+import bssm.doorlock.domain.room.domain.RoomAccessStat;
 import bssm.doorlock.domain.user.presentation.dto.res.StudentRes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -18,4 +17,5 @@ public class RoomAccessLogRes {
     private Long roomId;
     private StudentRes user;
     private LocalDateTime accessedAt;
+    private RoomAccessStat accessStat;
 }

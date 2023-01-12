@@ -1,7 +1,9 @@
 package bssm.doorlock.domain.room.facade;
 
 import bssm.doorlock.domain.room.domain.Room;
+import bssm.doorlock.domain.room.domain.RoomShare;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomAccessNotificationRes;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomShareNotificationRes;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.global.socket.SocketUtil;
 import bssm.doorlock.global.socket.domain.SocketEvent;
@@ -13,6 +15,15 @@ import org.springframework.stereotype.Component;
 public class RoomNotificationFacade {
 
     private final SocketUtil socketUtil;
+
+    public void sendRoomShare(RoomShare roomShare) {
+        RoomShareNotificationRes res = RoomShareNotificationRes.builder()
+                .owner(roomShare.getOwner().toStudentResponse())
+                .guest(roomShare.getGuest().toStudentResponse())
+                .build();
+
+        socketUtil.sendMessageToUser(roomShare.getOwner(), SocketEvent.RECEIVE_ROOM_SHARE, res);
+    }
 
     public void sendUpdateDoorState(Room room, User visitor) {
         sendUpdateDoorStateToUserClient(visitor, room);
