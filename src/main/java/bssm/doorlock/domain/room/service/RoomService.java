@@ -7,6 +7,7 @@ import bssm.doorlock.domain.room.presentation.dto.req.AcceptRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.AskRoomShareReq;
 import bssm.doorlock.domain.room.presentation.dto.req.UpdateDoorStateReq;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomAccessLogRes;
+import bssm.doorlock.domain.room.presentation.dto.res.RoomAccessNotificationRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomRes;
 import bssm.doorlock.domain.room.presentation.dto.res.RoomShareRes;
 import bssm.doorlock.domain.user.domain.User;
@@ -28,8 +29,8 @@ public class RoomService {
     private final RoomOwnerFacade roomOwnerFacade;
     private final RoomGuestFacade roomGuestFacade;
     private final RoomAccessFacade roomAccessFacade;
+    private final RoomNotificationFacade roomNotificationFacade;
     private final UserFacade userFacade;
-    private final SocketUtil socketUtil;
 
     public RoomRes getMyRoom(User owner) {
         return roomOwnerFacade.getByOwner(owner)
@@ -98,14 +99,14 @@ public class RoomService {
     }
 
     @Transactional
-    public void updateDoorState(User user, Long id, UpdateDoorStateReq req) {
+    public void updateDoorState(User visitor, Long id, UpdateDoorStateReq req) {
         Room room = roomFacade.getRoomById(id);
-        if (!roomFacade.accessCheck(user, room)) throw new ForbiddenAccessRoomException();
+        if (!roomFacade.accessCheck(visitor, room)) throw new ForbiddenAccessRoomException();
 
         room.setOpen(req.getState());
-        socketUtil.sendMessageToDoorClient(room.getId(), SocketEvent.UPDATE_DOOR_STATE, req.getState());
 
-        if (req.getState()) roomAccessFacade.saveLog(room, user);
+        roomNotificationFacade.sendUpdateDoorState(room, visitor);
+        if (req.getState()) roomAccessFacade.saveLog(room, visitor);
     }
 
     public List<RoomAccessLogRes> getAccessLog(User user) {

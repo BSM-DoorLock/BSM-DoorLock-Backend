@@ -16,10 +16,10 @@ public class SocketUtil {
     private final SocketClientProvider socketClientProvider;
     private final AsyncService asyncService;
 
-    public void sendMessageToUser(User user, SocketEvent socketEvent, Object msg) {
+    public void sendMessageToUser(User user, String socketEvent, Object msg) {
         List<SocketIOClient> clientList = socketClientProvider.findAllByUser(user);
         clientList.forEach(client ->
-                asyncService.run(() -> client.sendEvent(String.valueOf(socketEvent), msg))
+                asyncService.run(() -> client.sendEvent(socketEvent, msg))
         );
     }
 

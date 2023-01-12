@@ -26,7 +26,11 @@ public class UserFacade {
 
     public User getCachedUserByCode(long userCode) {
         return userRedisRepository.findById(userCode)
-                .orElseThrow(UserNotFoundException::new)
+                .orElseGet(() -> {
+                    User user = getByCode(userCode);
+                    saveCacheUser(user);
+                    return user.toUserRedis();
+                })
                 .toUser();
     }
 

@@ -6,7 +6,6 @@ import bssm.doorlock.domain.room.facade.RoomFacade;
 import bssm.doorlock.domain.user.domain.User;
 import bssm.doorlock.domain.user.facade.UserFacade;
 import bssm.doorlock.global.jwt.JwtProvider;
-import bssm.doorlock.global.socket.SocketUtil;
 import bssm.doorlock.global.socket.domain.SocketEvent;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -46,7 +45,9 @@ public class SocketService {
         socketIOServer.stop();
     }
 
-    private void onConnect(SocketIOClient client) {}
+    private void onConnect(SocketIOClient client) {
+
+    }
 
     private final DataListener<String> studentAuthentication = new DataListener<>() {
         @Override
@@ -55,6 +56,7 @@ public class SocketService {
                 User user = userFacade.getByCode(jwtProvider.getUserCode(token));
                 socketClientProvider.addClient(user, client);
             } catch (Exception e) {
+                e.printStackTrace();
                 client.sendEvent(SocketEvent.UNAUTHORIZED);
             }
         }
